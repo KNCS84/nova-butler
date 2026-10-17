@@ -1,0 +1,10 @@
+# Never upload these to Vercel - they only slow the upload down.
+node_modules
+.next
+out
+build
+coverage
+*.log
+.env*.local
+README.md
+TEMPLATE.md

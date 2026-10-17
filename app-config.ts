@@ -33,19 +33,19 @@ export interface AppConfig {
 }
 
 export const APP_CONFIG_DEFAULTS: AppConfig = {
-  companyName: 'NOVA',
-  pageTitle: 'NOVA Voice Agent',
-  pageDescription: 'A real-time voice and vision agent powered by Nova',
+  companyName: 'KNCS',
+  pageTitle: 'KNCS NOVA — Voice Butler',
+  pageDescription: 'Enterprise AI Voice Butler & Lead Intelligence for King Networks Consulting Services',
 
   supportsChatInput: true,
   supportsVideoInput: true,
   supportsScreenShare: true,
   isPreConnectBufferEnabled: false,
 
-  logo: '/lk-logo.svg',
-  accent: '#002cf2',
-  logoDark: '/lk-logo-dark.svg',
-  accentDark: '#1fd5f9',
+  logo: '/kncs-logo.png',
+  accent: '#1e3a8a',
+  logoDark: '/kncs-logo.png',
+  accentDark: '#3b82f6',
   startButtonText: 'Talk to Nova',
 
   // optional: audio visualization configuration

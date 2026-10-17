@@ -61,30 +61,21 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         {styles && <style>{styles}</style>}
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" href="/kncs-fav.png" />
       </head>
       <body className="overflow-x-hidden">
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
           <header className="fixed top-0 left-0 z-50 hidden w-full flex-row justify-between p-6 md:flex">
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://livekit.io"
-              className="scale-100 transition-transform duration-300 hover:scale-110"
-            >
+            <div className="flex items-center space-x-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={logo} alt={`${companyName} Logo`} className="block size-6 dark:hidden" />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={logoDark ?? logo}
-                alt={`${companyName} Logo`}
-                className="hidden size-6 dark:block"
-              />
-            </a>
+              <img src="/kncs-logo.png" alt="KNCS Logo" className="h-9 w-auto object-contain rounded-md bg-white/90 p-1 backdrop-blur-sm" />
+            </div>
           </header>
 
           {children}

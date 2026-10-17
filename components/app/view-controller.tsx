@@ -1,11 +1,13 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { AnimatePresence, motion } from 'motion/react';
 import { useSessionContext } from '@livekit/components-react';
 import type { AppConfig } from '@/app-config';
 import { AgentSessionView_01 } from '@/components/agents-ui/blocks/agent-session-view-01';
 import { WelcomeView } from '@/components/app/welcome-view';
+import { AuthGate } from '@/components/app/auth-gate';
 
 const MotionWelcomeView = motion.create(WelcomeView);
 const MotionSessionView = motion.create(AgentSessionView_01);
@@ -24,7 +26,7 @@ const VIEW_MOTION_PROPS = {
   exit: 'hidden',
   transition: {
     duration: 0.5,
-    ease: 'linear',
+    ease: 'linear' as const,
   },
 };
 
@@ -35,6 +37,27 @@ interface ViewControllerProps {
 export function ViewController({ appConfig }: ViewControllerProps) {
   const { isConnected, start } = useSessionContext();
   const { resolvedTheme } = useTheme();
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    // Check if previously authenticated in this browser
+    const stored = localStorage.getItem('kncs_nova_auth_pin');
+    setIsAuthenticated(!!stored);
+  }, []);
+
+  // Avoid flash of login screen before checking localStorage
+  if (isAuthenticated === null) {
+    return null;
+  }
+
+  // If not authenticated, show security lockscreen
+  if (!isAuthenticated) {
+    return (
+      <AnimatePresence mode="wait">
+        <AuthGate onAuthenticated={() => setIsAuthenticated(true)} />
+      </AnimatePresence>
+    );
+  }
 
   return (
     <AnimatePresence mode="wait">

@@ -29,9 +29,24 @@ interface AppProps {
 
 export function App({ appConfig }: AppProps) {
   const tokenSource = useMemo(() => {
-    return typeof process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT === 'string'
-      ? getSandboxTokenSource(appConfig)
-      : TokenSource.endpoint('/api/token');
+    if (typeof process.env.NEXT_PUBLIC_CONN_DETAILS_ENDPOINT === 'string') {
+      return getSandboxTokenSource(appConfig);
+    }
+    return TokenSource.custom(async () => {
+      const pin = typeof window !== 'undefined' ? localStorage.getItem('kncs_nova_auth_pin') || '' : '';
+      const res = await fetch(`/api/token?pin=${encodeURIComponent(pin)}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-nova-pin': pin,
+        },
+        body: JSON.stringify({ pin }),
+      });
+      if (!res.ok) {
+        throw new Error('Unauthorized: Invalid KNCS Terminal Security PIN');
+      }
+      return await res.json();
+    });
   }, [appConfig]);
 
   const session = useSession(
