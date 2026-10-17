@@ -1,3 +1,32 @@
+# KNCS NOVA — web console
+
+> **This fork is the KNCS NOVA voice console.** Live at
+> `https://nova-butler.vercel.app` (security PIN `7981`). It is the browser
+> half of **Nova**, KNCS's voice-first AI butler; the Python LiveKit worker
+> ("the suite") runs on Onyebuchi's laptop and does the talking and the
+> hands. The full project manual — `KNCS_NOVA_MASTER_HANDOVER.md` — lives in
+> the suite on the Desktop and in the Drive package
+> `kncs-nova-suite-v10.12.4.zip`.
+>
+> **Deploys are manual.** Vercel's git auto-deploy is disabled on this
+> project, so pushing to GitHub does not rebuild the site — a production
+> deployment has to be fired from the Vercel API.
+
+| Knob | Where |
+|---|---|
+| PIN gate | `components/app/auth-gate.tsx` (PIN from `NOVA_ACCESS_PIN` / `NEXT_PUBLIC_NOVA_PIN`) |
+| Obsidian background | `components/app/jarvis-background.tsx` |
+| **AI orb** (voice-reactive WebGL plasma sphere) | `components/app/ai-orb-background.tsx` |
+| Session + view routing | `components/app/app.tsx`, `components/app/view-controller.tsx` |
+| LiveKit token endpoint | `app/api/token/route.ts` |
+
+The orb reads the agent's audio-track volume (`useTrackVolume`) and the
+LiveKit session state, so it brightens, flares and rings while Nova speaks.
+If a browser has no WebGL the canvas is simply absent and the CSS obsidian
+background remains — it can never break the console.
+
+---
+
 # Agent Starter for React
 
 This is a starter template for [LiveKit Agents](https://docs.livekit.io/agents) that provides a simple voice interface using [Agents UI](https://livekit.io/ui) components and [LiveKit JavaScript SDK](https://github.com/livekit/client-sdk-js). It supports [voice](https://docs.livekit.io/agents/start/voice-ai), [transcriptions](https://docs.livekit.io/agents/build/text/), and [virtual avatars](https://docs.livekit.io/agents/integrations/avatar).
