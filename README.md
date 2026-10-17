@@ -8,9 +8,12 @@
 > the suite on the Desktop and in the Drive package
 > `kncs-nova-suite-v10.12.4.zip`.
 >
-> **Deploys are manual.** Vercel's git auto-deploy is disabled on this
-> project, so pushing to GitHub does not rebuild the site — a production
-> deployment has to be fired from the Vercel API.
+> **Deploys.** Merging to `main` auto-deploys to Vercel through the connected
+> GitHub App (the project's native git integration has
+> `createDeployments: disabled`, but the App still promotes a production
+> deployment per merge — confirmed 17 Oct 2026). Pushing a feature branch
+> deploys nothing. If a merge lands and no deployment appears, fire one from
+> the Vercel API.
 
 | Knob | Where |
 |---|---|
