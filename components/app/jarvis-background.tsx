@@ -1,3 +1,5 @@
+import { AIOrbLayer } from '@/components/app/ai-orb-background';
+
 export function JarvisBackground() {
   const PARTICLES = [
     { left: '10%', top: '20%', delay: '0s', size: '3px' },
@@ -21,6 +23,9 @@ export function JarvisBackground() {
       <div className="absolute -top-[20%] -left-[10%] h-[70vw] w-[70vw] max-w-[850px] rounded-full bg-blue-900/15 blur-[120px]" />
       <div className="absolute top-[40%] -right-[15%] h-[60vw] w-[60vw] max-w-[750px] rounded-full bg-indigo-900/15 blur-[140px]" />
       <div className="absolute -bottom-[20%] left-[25%] h-[50vw] w-[50vw] max-w-[650px] rounded-full bg-blue-950/25 blur-[100px]" />
+
+      {/* 2b. Nova AI Orb — voice-reactive plasma sphere (WebGL, screen-blended) */}
+      <AIOrbLayer />
 
       {/* 3. Subtle Luxury Obsidian Glass Grid */}
       <div
