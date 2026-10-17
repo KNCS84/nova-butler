@@ -2,13 +2,6 @@ import { NextResponse } from 'next/server';
 import { AccessToken, type AccessTokenOptions, type VideoGrant } from 'livekit-server-sdk';
 import { RoomConfiguration } from '@livekit/protocol';
 
-type ConnectionDetails = {
-  serverUrl: string;
-  roomName: string;
-  participantName: string;
-  participantToken: string;
-};
-
 // NOTE: environment variables defined in Vercel:
 const API_KEY = process.env.LIVEKIT_API_KEY;
 const API_SECRET = process.env.LIVEKIT_API_SECRET;
@@ -39,8 +32,7 @@ export async function POST(req: Request) {
       body = null;
     }
 
-    // Ensure the default agent ('my-agent') is dispatched to every room
-    const agentName = process.env.AGENT_NAME || 'my-agent';
+    const agentName = 'my-agent';
     const roomConfig = body?.room_config
       ? RoomConfiguration.fromJson(body.room_config, { ignoreUnknownFields: true })
       : new RoomConfiguration({
@@ -62,12 +54,16 @@ export async function POST(req: Request) {
       roomConfig
     );
 
-    // Return connection details
-    const data: ConnectionDetails = {
+    // Return connection details in both snake_case and camelCase
+    const data = {
+      server_url: LIVEKIT_URL,
       serverUrl: LIVEKIT_URL,
-      roomName,
-      participantName,
-      participantToken,
+      participant_token: participantToken,
+      participantToken: participantToken,
+      room_name: roomName,
+      roomName: roomName,
+      participant_name: participantName,
+      participantName: participantName,
     };
     const headers = new Headers({
       'Cache-Control': 'no-store',
