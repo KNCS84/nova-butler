@@ -9,17 +9,14 @@ type ConnectionDetails = {
   participantToken: string;
 };
 
-// NOTE: you are expected to define the following environment variables in `.env.local`:
+// NOTE: environment variables defined in Vercel:
 const API_KEY = process.env.LIVEKIT_API_KEY;
 const API_SECRET = process.env.LIVEKIT_API_SECRET;
 const LIVEKIT_URL = process.env.LIVEKIT_URL;
 
-// don't cache the results
 export const revalidate = 0;
 
 export async function POST(req: Request) {
-  // Allow production token generation for personal Nova assistant
-
   try {
     if (LIVEKIT_URL === undefined) {
       throw new Error('LIVEKIT_URL is not defined');
@@ -41,9 +38,18 @@ export async function POST(req: Request) {
     } catch {
       body = null;
     }
+
+    // Ensure the default agent ('my-agent') is dispatched to every room
+    const agentName = process.env.AGENT_NAME || 'my-agent';
     const roomConfig = body?.room_config
       ? RoomConfiguration.fromJson(body.room_config, { ignoreUnknownFields: true })
-      : new RoomConfiguration();
+      : new RoomConfiguration({
+          agents: [{ agentName: agentName }],
+        });
+
+    if (!roomConfig.agents || roomConfig.agents.length === 0) {
+      roomConfig.agents = [{ agentName: agentName } as any];
+    }
 
     // Generate participant token
     const participantName = 'user';
@@ -88,6 +94,7 @@ function createParticipantToken(
     room: roomName,
     roomJoin: true,
     canPublish: true,
+    canPublishData: true,
     canSubscribe: true,
   };
   at.addGrant(grant);
