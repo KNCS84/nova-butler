@@ -64,8 +64,8 @@ export const APP_CONFIG_DEFAULTS: AppConfig = {
   //audioVisualizerWaveLineWidth: 3,
   audioVisualizerType: 'aura',
 
-  // agent dispatch configuration
-  agentName: process.env.AGENT_NAME ?? 'my-agent',
+  // agent dispatch configuration (undefined enables automatic room dispatch)
+  agentName: undefined,
 
   // LiveKit Cloud Sandbox configuration
   sandboxId: undefined,

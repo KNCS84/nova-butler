@@ -2,14 +2,24 @@ import { NextResponse } from 'next/server';
 import { AccessToken, type AccessTokenOptions, type VideoGrant } from 'livekit-server-sdk';
 import { RoomConfiguration } from '@livekit/protocol';
 
-// NOTE: environment variables defined in Vercel:
+type ConnectionDetails = {
+  serverUrl: string;
+  roomName: string;
+  participantName: string;
+  participantToken: string;
+};
+
+// NOTE: you are expected to define the following environment variables in `.env.local`:
 const API_KEY = process.env.LIVEKIT_API_KEY;
 const API_SECRET = process.env.LIVEKIT_API_SECRET;
 const LIVEKIT_URL = process.env.LIVEKIT_URL;
 
+// don't cache the results
 export const revalidate = 0;
 
 export async function POST(req: Request) {
+  // Allow production token generation for personal Nova assistant
+
   try {
     if (LIVEKIT_URL === undefined) {
       throw new Error('LIVEKIT_URL is not defined');
@@ -32,16 +42,11 @@ export async function POST(req: Request) {
       body = null;
     }
 
-    const agentName = 'my-agent';
+    // If client explicitly passed a room_config, use it;
+    // otherwise pass undefined so LiveKit Cloud uses default automatic worker dispatch.
     const roomConfig = body?.room_config
       ? RoomConfiguration.fromJson(body.room_config, { ignoreUnknownFields: true })
-      : new RoomConfiguration({
-          agents: [{ agentName: agentName }],
-        });
-
-    if (!roomConfig.agents || roomConfig.agents.length === 0) {
-      roomConfig.agents = [{ agentName: agentName } as any];
-    }
+      : undefined;
 
     // Generate participant token
     const participantName = 'user';
@@ -54,7 +59,7 @@ export async function POST(req: Request) {
       roomConfig
     );
 
-    // Return connection details in both snake_case and camelCase
+    // Return connection details (both snake_case and camelCase for full SDK compatibility)
     const data = {
       server_url: LIVEKIT_URL,
       serverUrl: LIVEKIT_URL,
